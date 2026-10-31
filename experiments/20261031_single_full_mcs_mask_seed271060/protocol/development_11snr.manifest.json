@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "purpose": "development_detail_only",
+  "checkpoint_selection": false,
+  "sources": 2600,
+  "views": 28600,
+  "snr_grid_db": [
+    -10.0,
+    -8.0,
+    -6.0,
+    -4.0,
+    -2.0,
+    0.0,
+    2.0,
+    4.0,
+    6.0,
+    8.0,
+    10.0
+  ],
+  "full_to_mcs_bitwise": true,
+  "max_abs": 0.0,
+  "path": "/home/zh_3220241128/SN/SHELL_original_multi_snr_20261029/runs/single_full_mcs_mask_control_20261030_20261031_093802/development_11snr.h5",
+  "bytes": 9380656000,
+  "sha256": "c40d5981c98ac48929a75de234ed4dae5a4b1f73a1f50ddff7304cbff5b0d4a7"
+}

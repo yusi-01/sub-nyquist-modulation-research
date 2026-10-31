@@ -1,0 +1,23 @@
+{
+  "seed": 271060,
+  "batch_size": 1024,
+  "epochs": 200,
+  "warmup": 5,
+  "optimizer": "Adam",
+  "lr": 0.01,
+  "weight_decay": 0.0001,
+  "scheduler": "CosineAnnealingLR",
+  "label_smoothing": 0.1,
+  "amp": true,
+  "tf32": true,
+  "model": "Res1dNet311",
+  "in_channel": 80,
+  "parameters": 3885965,
+  "approx_macs_per_sample": 242278912,
+  "approx_flops_per_sample": 484557824,
+  "input": "full40960_complex_reversible_polyphase_80x1024_div8",
+  "per_sample_rms": false,
+  "best_validation_accuracy": 0.743006993006993,
+  "best_epoch": 166,
+  "checkpoint_sha256": "02bd6940e47404bfd32b53d7a65183f0f18a17aadffe6a8063b8946f4cdff8ab"
+}

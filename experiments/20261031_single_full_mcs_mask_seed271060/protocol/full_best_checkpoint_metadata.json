@@ -1,0 +1,7 @@
+{
+  "selected_on": "validation_accuracy",
+  "best": 0.743006993006993,
+  "epoch": 166,
+  "tie_rule": "latest_ge",
+  "development_test_used": false
+}

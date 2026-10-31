@@ -1,0 +1,67 @@
+{
+  "status": "PASS",
+  "coset": [
+    16,
+    11,
+    1,
+    0,
+    27,
+    24,
+    37,
+    31
+  ],
+  "active_channels": [
+    32,
+    33,
+    22,
+    23,
+    2,
+    3,
+    0,
+    1,
+    54,
+    55,
+    48,
+    49,
+    74,
+    75,
+    62,
+    63
+  ],
+  "splits": {
+    "train": {
+      "samples": 8,
+      "mcs_max_abs": 1.7881393432617188e-07,
+      "active_max_abs": 0.0,
+      "zero_max_abs": 0.0,
+      "finite": true
+    },
+    "validation": {
+      "samples": 8,
+      "mcs_max_abs": 1.7881393432617188e-07,
+      "active_max_abs": 0.0,
+      "zero_max_abs": 0.0,
+      "finite": true
+    }
+  },
+  "same_initial_state": true,
+  "parameters_full": 3885965,
+  "parameters_mask": 3885965,
+  "first_conv": {
+    "shape": [
+      64,
+      80,
+      7
+    ],
+    "note": "64 个恒零输入通道的 conv0 权重不接收数据梯度，但仍受 Adam weight_decay；conv0 后紧接 BatchNorm1d。"
+  },
+  "forward": {
+    "output_shape": [
+      8,
+      13
+    ],
+    "finite": true,
+    "conv_std": 0.08523344248533249,
+    "bn_std": 0.08523301780223846
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "status": "PASS",
+  "dataset_seed": 271050,
+  "free_gib_before": 229.64724349975586,
+  "files": {
+    "train": {
+      "path": "/home/zh_3220241128/SN/SHELL_original_multi_snr_20261029/runs/single_full_mcs_paired_20261030_20261030_170342/full_data/train.h5",
+      "sha256": "a03d327c8accc31e1461657261b79b01ab1aa479895954024ab9ff0730912a29",
+      "sources": 13000,
+      "views": 143000,
+      "snr_grid_db": [
+        -10.0,
+        -8.0,
+        -6.0,
+        -4.0,
+        -2.0,
+        0.0,
+        2.0,
+        4.0,
+        6.0,
+        8.0,
+        10.0
+      ],
+      "bytes": 46903175232
+    },
+    "validation": {
+      "path": "/home/zh_3220241128/SN/SHELL_original_multi_snr_20261029/runs/single_full_mcs_paired_20261030_20261030_170342/full_data/validation.h5",
+      "sha256": "3777d9d8bab4d0da38394aa0a56f1d6e753ae5411e77addb17cedf329eac05a5",
+      "sources": 2600,
+      "views": 28600,
+      "snr_grid_db": [
+        -10.0,
+        -8.0,
+        -6.0,
+        -4.0,
+        -2.0,
+        0.0,
+        2.0,
+        4.0,
+        6.0,
+        8.0,
+        10.0
+      ],
+      "bytes": 9380658048
+    },
+    "development_test": {
+      "path": "/home/zh_3220241128/SN/SHELL_original_multi_snr_20261029/runs/single_full_mcs_paired_20261030_20261030_170342/full_data/development_test.h5",
+      "sha256": "077b0a88a00b3e964447b3b7da56375062ca836c5180893c01ad373f4e668a52",
+      "sources": 2600,
+      "views": 13000,
+      "snr_grid_db": [
+        -10.0,
+        -6.0,
+        -2.0,
+        2.0,
+        10.0
+      ],
+      "bytes": 4263958048
+    }
+  },
+  "exhaustive_pair_check": {
+    "train": {
+      "views": 143000,
+      "bitwise": true,
+      "max_abs": 0.0
+    },
+    "validation": {
+      "views": 28600,
+      "bitwise": true,
+      "max_abs": 0.0
+    },
+    "development_test": {
+      "views": 13000,
+      "bitwise": true,
+      "max_abs": 0.0
+    }
+  },
+  "free_gib_after": 173.25540161132812
+}
