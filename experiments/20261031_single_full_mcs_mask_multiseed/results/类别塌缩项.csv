@@ -1,0 +1,4 @@
+﻿seed,snr_db,arm,label,predicted_count,zero_prediction
+271062,-10,MCS-mask80,APSK64,4,False
+271062,-10,MCS-mask80,QAM64,13,False
+271062,-8,MCS-mask80,APSK64,12,False

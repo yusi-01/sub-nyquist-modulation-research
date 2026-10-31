@@ -1,6 +1,8 @@
 """从本地审计产物更新小型、可复核的 Git 归档文件。"""
 from pathlib import Path
 from shutil import copy2
+from shutil import copyfileobj
+import gzip
 
 repo = Path(__file__).resolve().parents[1]
 workspace = repo.parent
@@ -9,12 +11,16 @@ control = deliverables / "single_full_mcs_mask_control_20261030_20261031_093802"
 paired = deliverables / "single_full_mcs_paired_20261030_20261030_170342"
 base = repo / "experiments" / "20261031_single_full_mcs_mask_seed271060"
 multiseed = repo / "experiments" / "20261031_single_full_mcs_mask_multiseed"
+multi_local = deliverables / "single_full_mcs_mask_multiseed_20261031"
 
 items = [
     (deliverables / "研究文件导航与归档规则_20261031.md", repo / "docs" / "研究文件导航与归档规则_20261031.md"),
     (deliverables / "单信号_Full_MCS-mask_三种子复验_执行状态与机制预案_20261031.md", multiseed / "results" / "三种子复验_执行状态与机制预案_20261031.md"),
     (deliverables / "single_full_mcs_mask_multiseed_20261031" / "run_serial_training.sh", multiseed / "code" / "run_serial_training.sh"),
     (deliverables / "single_full_mcs_mask_multiseed_20261031" / "launch_seed271062_parallel.sh", multiseed / "code" / "launch_seed271062_parallel.sh"),
+    (multi_local / "evaluate_seed.sh", multiseed / "code" / "evaluate_seed.sh"),
+    (multi_local / "analyze_three_seeds.py", multiseed / "code" / "analyze_three_seeds.py"),
+    (multi_local / "server_export" / "analysis_export_20261031.tar.gz", multiseed / "artifacts" / "seed271061_271062_predictions_and_training_metadata.tar.gz"),
     (control / "单信号_Full_MCS-mask_同架构控制_结果审计_20261031.md", base / "results" / "单种子结果审计.md"),
     (control / "审计_分区汇总.csv", base / "results" / "审计_分区汇总.csv"),
     (control / "审计_关键类别指标.csv", base / "results" / "审计_关键类别指标.csv"),
@@ -44,3 +50,16 @@ for src, dest in items:
     dest.parent.mkdir(parents=True, exist_ok=True)
     copy2(src, dest)
     print(dest.relative_to(repo))
+
+for src in sorted((multi_local / "analysis").glob("*.csv")) + sorted((multi_local / "analysis").glob("*.md")):
+    dest = multiseed / "results" / src.name
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    copy2(src, dest)
+    print(dest.relative_to(repo))
+
+old_predictions = control / "control_development_11snr_results_v5" / "control_predictions.csv"
+old_archive = base / "artifacts" / "seed271060_development_predictions.csv.gz"
+old_archive.parent.mkdir(parents=True, exist_ok=True)
+with old_predictions.open("rb") as source, gzip.open(old_archive, "wb", compresslevel=6) as target:
+    copyfileobj(source, target)
+print(old_archive.relative_to(repo))
