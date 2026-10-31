@@ -14,6 +14,7 @@ items = [
     (deliverables / "研究文件导航与归档规则_20261031.md", repo / "docs" / "研究文件导航与归档规则_20261031.md"),
     (deliverables / "单信号_Full_MCS-mask_三种子复验_执行状态与机制预案_20261031.md", multiseed / "results" / "三种子复验_执行状态与机制预案_20261031.md"),
     (deliverables / "single_full_mcs_mask_multiseed_20261031" / "run_serial_training.sh", multiseed / "code" / "run_serial_training.sh"),
+    (deliverables / "single_full_mcs_mask_multiseed_20261031" / "launch_seed271062_parallel.sh", multiseed / "code" / "launch_seed271062_parallel.sh"),
     (control / "单信号_Full_MCS-mask_同架构控制_结果审计_20261031.md", base / "results" / "单种子结果审计.md"),
     (control / "审计_分区汇总.csv", base / "results" / "审计_分区汇总.csv"),
     (control / "审计_关键类别指标.csv", base / "results" / "审计_关键类别指标.csv"),
