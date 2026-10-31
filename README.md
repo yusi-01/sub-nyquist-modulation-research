@@ -8,6 +8,7 @@
 |---|---|---|
 |2026-10-30/31 Single Full80 vs MCS-mask80，seed 271060|Development 审计完成|[实验索引](experiments/20261031_single_full_mcs_mask_seed271060/README.md)|
 |seed 271061、271062 复验|训练与11档 Development 评价完成；三种子报告已归档|[实验索引](experiments/20261031_single_full_mcs_mask_multiseed/README.md)|
+|2026-11-01 M=8 Coset 位置归因|候选/协议已冻结，训练启动中|[实验索引](experiments/20261101_coset_position_m8/README.md)|
 
 ## 文件原则
 
