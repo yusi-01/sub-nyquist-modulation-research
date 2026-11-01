@@ -1,0 +1,27 @@
+{
+  "snr_db": -2,
+  "source_count": 1690,
+  "noise_seed_rule": "271071 + source_row, independent of stored noise seed",
+  "arms": {
+    "full": {
+      "original_pair": 1690,
+      "fresh_pair": 850,
+      "original_component": 3380,
+      "fresh_component": 2316,
+      "original_pair_exact": 1.0,
+      "fresh_pair_exact": 0.5029585798816568,
+      "original_modacc": 1.0,
+      "fresh_modacc": 0.685207100591716
+    },
+    "mask": {
+      "original_pair": 1689,
+      "fresh_pair": 510,
+      "original_component": 3379,
+      "fresh_component": 1751,
+      "original_pair_exact": 0.9994082840236687,
+      "fresh_pair_exact": 0.30177514792899407,
+      "original_modacc": 0.9997041420118343,
+      "fresh_modacc": 0.5180473372781065
+    }
+  }
+}
