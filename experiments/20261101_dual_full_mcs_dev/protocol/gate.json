@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "results": {
+    "train": {
+      "sources": 1690,
+      "views": 18590,
+      "generation_order_combo_repeats": 10,
+      "frequency_order_combo_min": 5,
+      "frequency_order_combo_max": 15,
+      "max_full_mcs_abs_error": 0.0
+    },
+    "validation": {
+      "sources": 338,
+      "views": 3718,
+      "generation_order_combo_repeats": 2,
+      "frequency_order_combo_min": 0,
+      "frequency_order_combo_max": 4,
+      "max_full_mcs_abs_error": 0.0
+    },
+    "development_test": {
+      "sources": 338,
+      "views": 3718,
+      "generation_order_combo_repeats": 2,
+      "frequency_order_combo_min": 0,
+      "frequency_order_combo_max": 4,
+      "max_full_mcs_abs_error": 0.0
+    }
+  },
+  "source_and_noise_split_isolation": true
+}

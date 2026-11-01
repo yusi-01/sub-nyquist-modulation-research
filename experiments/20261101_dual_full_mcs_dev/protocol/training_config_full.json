@@ -1,0 +1,13 @@
+{
+  "arm": "full",
+  "seed": 271070,
+  "epochs": 200,
+  "batch": 256,
+  "optimizer": "Adam",
+  "lr": 0.001,
+  "weight_decay": 0.0001,
+  "label_smoothing": 0.1,
+  "checkpoint_selection": "Validation PairExact; Macro-F1 tie-break",
+  "model": "DualV6 80 input 2x13",
+  "source_data": "/home/zh_3220241128/SN/SHELL_original_multi_snr_20261029/runs/dual_full_mcs_dev_20261101/data_dual_dev1690_seed271070"
+}

@@ -1,0 +1,11 @@
+{
+  "best_validation_epoch": 94,
+  "best_validation_pair_exact": 0.039537385691231844,
+  "development": {
+    "pair_exact": 0.025820333512641205,
+    "component_modacc": 0.17065626681011298,
+    "macro_f1": 0.16100807068685008,
+    "loss": 2.6547715023937504
+  },
+  "rows": 3718
+}
