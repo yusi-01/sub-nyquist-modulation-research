@@ -1,0 +1,6 @@
+{
+  "best_epoch": 8,
+  "best_validation_pair_exact": 0.05244755244755245,
+  "total_optimizer_steps": 43600,
+  "diagnostic_epoch": 67
+}

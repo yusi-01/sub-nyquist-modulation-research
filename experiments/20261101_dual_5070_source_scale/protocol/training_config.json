@@ -1,0 +1,22 @@
+{
+  "seed": 271070,
+  "arm": "mask",
+  "model": "DualV6(80,13)",
+  "sources": 5070,
+  "old_sources": 1690,
+  "new_sources": 3380,
+  "batch": 256,
+  "optimizer": "Adam",
+  "lr": 0.001,
+  "weight_decay": 0.0001,
+  "label_smoothing": 0.1,
+  "epochs": 200,
+  "checkpoint_selection": "Validation PairExact; Macro-F1 tie-break",
+  "old_steps_per_epoch": 73,
+  "new_steps_per_epoch": 218,
+  "old_200_epoch_steps": 14600,
+  "equal_update_diagnostic_epoch": 67,
+  "initial_state_sha256": "f32629f7e23ad1587b68a066f031e263f594af06040251cca60ef8406422603c",
+  "old_data": "data_dual_dev1690_seed271070",
+  "append_data": "data_dual_append3380_seed271070_20261101"
+}
