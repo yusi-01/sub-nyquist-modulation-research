@@ -1,0 +1,40 @@
+{
+  "rows": 37180,
+  "sources": 3380,
+  "snrs": [
+    -10,
+    -8,
+    -6,
+    -4,
+    -2,
+    0,
+    2,
+    4,
+    6,
+    8,
+    10
+  ],
+  "per_snr_sources": {
+    "-10": 3380,
+    "-8": 3380,
+    "-6": 3380,
+    "-4": 3380,
+    "-2": 3380,
+    "0": 3380,
+    "2": 3380,
+    "4": 3380,
+    "6": 3380,
+    "8": 3380,
+    "10": 3380
+  },
+  "sha256": {
+    "full_predictions": "d062ef9abd206841d623d0a8e56d09a92b30093775695381ec16284c9baa5691",
+    "mcs_predictions": "ac7d5e647a64b6b5f5b5d01d5262136ceb490644d1a48041aa2400479e749814",
+    "manifest": "cfdc1ef9a50ccd3dfe68996d1b3d8f6446e8933cdd347a9b401cc2b83c0b5e01",
+    "geometry": "452b91e1b6fad43ad524fb7a843a855977caca39c3ab243c6a1b048af855cfce"
+  },
+  "geometry_pairs": 276,
+  "geometry_rho_max": 0.5804403756355638,
+  "geometry_eta_max": 1.5080932495367017,
+  "max_rho_range_within_exact_spacing": 2.789435349370706e-15
+}
