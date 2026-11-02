@@ -1,0 +1,96 @@
+{
+  "gate": "PASS",
+  "split_checks": {
+    "train": {
+      "sources": 16900,
+      "views": 185900,
+      "sampled_views_checked_against_mcs_and_full": 9,
+      "all_sources_label_order_checked": true,
+      "active_channels": [
+        32,
+        33,
+        22,
+        23,
+        2,
+        3,
+        0,
+        1,
+        54,
+        55,
+        48,
+        49,
+        74,
+        75,
+        62,
+        63
+      ]
+    },
+    "validation": {
+      "sources": 3380,
+      "views": 37180,
+      "sampled_views_checked_against_mcs_and_full": 9,
+      "all_sources_label_order_checked": true,
+      "active_channels": [
+        32,
+        33,
+        22,
+        23,
+        2,
+        3,
+        0,
+        1,
+        54,
+        55,
+        48,
+        49,
+        74,
+        75,
+        62,
+        63
+      ]
+    },
+    "development_test": {
+      "sources": 3380,
+      "views": 37180,
+      "sampled_views_checked_against_mcs_and_full": 9,
+      "all_sources_label_order_checked": true,
+      "active_channels": [
+        32,
+        33,
+        22,
+        23,
+        2,
+        3,
+        0,
+        1,
+        54,
+        55,
+        48,
+        49,
+        74,
+        75,
+        62,
+        63
+      ]
+    }
+  },
+  "parameter_count": 6324122,
+  "full80_parameter_count": 6324122,
+  "tensor_shapes_match_full_checkpoint": true,
+  "two_reconstructed_initial_states_equal_tensorwise": true,
+  "historical_full_actual_initial_state_saved": false,
+  "expected_initial_state_sha256": "5b3972eadf2b91a5cb846e1997253857e6edd7924a81121ee2a65625ee7b0d04",
+  "batch512_forward_backward_pass": true,
+  "peak_allocated_gib": 5.45229959487915,
+  "input_scale": "physical_iq_div_8",
+  "coset": [
+    16,
+    11,
+    1,
+    0,
+    27,
+    24,
+    37,
+    31
+  ]
+}
