@@ -1,0 +1,7 @@
+{
+  "parameter_count": 6324122,
+  "full80_parameter_count": 6324122,
+  "tensor_shapes_match_full_checkpoint": true,
+  "initial_state_sha256": "3c338d7bb0e9187434bca68ca190450067409fe323b74ac0c37559f51e66b5b7",
+  "historical_full_initial_state_saved": false
+}

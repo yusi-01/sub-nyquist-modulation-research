@@ -1,0 +1,38 @@
+{
+  "arm": "mask80",
+  "seed": 271060,
+  "epochs": 200,
+  "batch": 512,
+  "data": "runs/shell_dual_paired_16900_seed271060_20261101/data_v2_paired",
+  "full_cache": null,
+  "coset": [
+    16,
+    11,
+    1,
+    0,
+    27,
+    24,
+    37,
+    31
+  ],
+  "mask_channels": [
+    32,
+    33,
+    22,
+    23,
+    2,
+    3,
+    0,
+    1,
+    54,
+    55,
+    48,
+    49,
+    74,
+    75,
+    62,
+    63
+  ],
+  "input_scale": "physical_iq_div_8",
+  "checkpoint_rule": "Validation component ModAcc >= best; tie overwrites"
+}

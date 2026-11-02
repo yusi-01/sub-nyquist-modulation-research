@@ -1,0 +1,37 @@
+{
+  "gate": "PASS",
+  "rows": 37180,
+  "sources": 3380,
+  "per_snr_sources": {
+    "-10": 3380,
+    "-8": 3380,
+    "-6": 3380,
+    "-4": 3380,
+    "-2": 3380,
+    "0": 3380,
+    "2": 3380,
+    "4": 3380,
+    "6": 3380,
+    "8": 3380,
+    "10": 3380
+  },
+  "prediction_sha256": {
+    "full": "d062ef9abd206841d623d0a8e56d09a92b30093775695381ec16284c9baa5691",
+    "mcs": "ac7d5e647a64b6b5f5b5d01d5262136ceb490644d1a48041aa2400479e749814",
+    "mask": "6f9d0ccbf371b81992c0a790ec6c69778058cbe5c027219a07ae5b39b19f4163"
+  },
+  "low_snr_focus": {
+    "full_QPSK_to_PSK16_low_views": 99,
+    "full_QPSK_to_PSK8_low_views": 37,
+    "full_QPSK_to_OQPSK_low_views": 28,
+    "mcs_QPSK_to_PSK16_low_views": 970,
+    "mcs_QPSK_to_PSK8_low_views": 666,
+    "mcs_QPSK_to_OQPSK_low_views": 139,
+    "mask_QPSK_to_PSK16_low_views": 1198,
+    "mask_QPSK_to_PSK8_low_views": 665,
+    "mask_QPSK_to_OQPSK_low_views": 144
+  },
+  "bootstrap_resamples": 2000,
+  "interval_unit": "source_uid",
+  "checkpoint_selection": "Validation only"
+}

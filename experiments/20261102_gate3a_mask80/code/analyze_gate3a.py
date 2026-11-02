@@ -106,8 +106,29 @@ def analyze(d: pd.DataFrame, output: Path) -> dict:
     pd.DataFrame(score_rows).to_csv(output / "三模型逐SNR指标.csv", index=False)
     pd.DataFrame(class_rows).to_csv(output / "三模型逐SNR逐类指标.csv", index=False)
     pd.DataFrame(confusion_rows).to_csv(output / "三模型完整13x13混淆矩阵.csv", index=False)
-    pd.DataFrame(pair_rows).to_csv(output / "三组比较逐SNR配对四格.csv", index=False)
     pd.DataFrame(direction_rows).to_csv(output / "重点类别混淆方向.csv", index=False)
+    aggregate_rows, aggregate_confusion_rows = [], []
+    for range_name, selected in [("all", SNRS), ("low_-10_to_0", SNRS[:6]), ("high_2_to_10", SNRS[6:])]:
+        sub = d[d.snr_db.isin(selected)]
+        truth = pd.concat((sub.true_1, sub.true_2), ignore_index=True)
+        for arm in ARMS:
+            pred = pd.concat((sub[f"{arm}_pred_1"], sub[f"{arm}_pred_2"]), ignore_index=True)
+            matrix = pd.crosstab(truth, pred).reindex(index=LABELS, columns=LABELS, fill_value=0)
+            for label in LABELS:
+                support, predicted, tp = int(matrix.loc[label].sum()), int(matrix[label].sum()), int(matrix.loc[label, label])
+                aggregate_rows.append({"snr_range": range_name, "arm": arm, "true_class": label,
+                                       "support_component_views": support, "predicted_count": predicted,
+                                       "recall": tp / support if support else np.nan,
+                                       "precision": tp / predicted if predicted else np.nan,
+                                       "f1": 2 * tp / (support + predicted) if support + predicted else 0.0})
+                for target in LABELS:
+                    count = int(matrix.loc[label, target])
+                    aggregate_confusion_rows.append({"snr_range": range_name, "arm": arm,
+                                                     "true_class": label, "pred_class": target,
+                                                     "count": count, "support": support,
+                                                     "row_fraction": count / support if support else np.nan})
+    pd.DataFrame(aggregate_rows).to_csv(output / "三模型低高SNR逐类汇总.csv", index=False)
+    pd.DataFrame(aggregate_confusion_rows).to_csv(output / "三模型低高SNR完整混淆矩阵.csv", index=False)
     interval_rows = []
     for a, b in PAIRS:
         pair_pivot = d.assign(delta=d[f"{a}_pair_exact"] - d[f"{b}_pair_exact"]).pivot(
@@ -117,6 +138,10 @@ def analyze(d: pd.DataFrame, output: Path) -> dict:
             index="source_uid", columns="snr_db", values="delta").reindex(columns=SNRS)
         assert pair_pivot.shape == mod_pivot.shape == (3380, 11)
         assert not pair_pivot.isna().any().any() and not mod_pivot.isna().any().any()
+        for snr in SNRS:
+            row = next(row for row in pair_rows if row["comparison"] == f"{a}-{b}" and row["snr_db"] == snr)
+            row["pair_net_delta"], row["pair_ci_low"], row["pair_ci_high"] = grouped_ci(pair_pivot, bootstrap_index, [snr])
+            row["modacc_net_delta"], row["modacc_ci_low"], row["modacc_ci_high"] = grouped_ci(mod_pivot, bootstrap_index, [snr])
         for group_name, selected in [("all", SNRS), ("low_-10_to_0", SNRS[:6]), ("high_2_to_10", SNRS[6:])]:
             pair, pair_lo, pair_hi = grouped_ci(pair_pivot, bootstrap_index, selected)
             mod, mod_lo, mod_hi = grouped_ci(mod_pivot, bootstrap_index, selected)
@@ -125,6 +150,7 @@ def analyze(d: pd.DataFrame, output: Path) -> dict:
                                   "pair_ci_low": pair_lo, "pair_ci_high": pair_hi,
                                   "modacc_delta": mod, "modacc_ci_low": mod_lo, "modacc_ci_high": mod_hi})
     pd.DataFrame(interval_rows).to_csv(output / "三组比较源级成组区间.csv", index=False)
+    pd.DataFrame(pair_rows).to_csv(output / "三组比较逐SNR配对四格.csv", index=False)
     collapse = []
     for arm in ARMS:
         predictions = pd.concat((d[f"{arm}_pred_1"], d[f"{arm}_pred_2"]), ignore_index=True)
@@ -157,4 +183,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
