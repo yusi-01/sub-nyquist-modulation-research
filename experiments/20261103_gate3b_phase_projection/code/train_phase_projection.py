@@ -1,0 +1,193 @@
+"""GATE-3B 唯一候选训练脚本；仅供通过门禁后另行批准运行。"""
+from __future__ import annotations
+
+import argparse
+import csv
+import hashlib
+import json
+import os
+import random
+import sys
+from pathlib import Path
+
+import h5py
+import numpy as np
+import torch
+from torch.utils.data import DataLoader, Dataset
+from phase_projection import COSET, PhaseProjection
+
+LABELS = ["APSK16", "APSK32", "APSK64", "ASK8", "BPSK", "OQPSK", "PSK16", "PSK8", "QAM128", "QAM16", "QAM256", "QAM64", "QPSK"]
+
+
+class Views(Dataset):
+    def __init__(self, path: Path, arm: str, full_cache: Path | None):
+        self.path, self.arm, self.full_cache = path, arm, full_cache
+        self.h = self.cache = None
+        with h5py.File(path) as h:
+            self.sources, self.views = h["mcs_iq"].shape[:2]
+            assert self.views == 11 and h["clean_full_iq"].shape == (self.sources, 40960, 2)
+        assert arm == "phase80" and full_cache is None
+
+    def __len__(self):
+        return self.sources * self.views
+
+    def __getitem__(self, index):
+        if self.h is None:
+            self.h = h5py.File(self.path, "r")
+        i, j = divmod(index, self.views)
+        # 编码器只接收原 H5 的 8 路 MCS IQ；固定 /8 与相位投影在 GPU 上执行。
+        x = np.ascontiguousarray(self.h["mcs_iq"][i, j].T, dtype=np.float32)
+        y = self.h["modulation_labels"][i].astype(np.int64)
+        target = np.zeros(26, np.float32)
+        target[y[0]] = 1.0
+        target[13 + y[1]] = 1.0
+        return torch.from_numpy(x), torch.from_numpy(target), torch.from_numpy(y), index
+
+
+def metrics(y, p):
+    acc = float(np.mean(y == p))
+    pair = float(np.mean(np.all(y == p, axis=1)))
+    recall = []
+    f1 = []
+    for k in range(13):
+        tp = int(np.sum((y == k) & (p == k)))
+        fn = int(np.sum((y == k) & (p != k)))
+        fp = int(np.sum((y != k) & (p == k)))
+        recall.append(float(tp / (tp + fn)) if tp + fn else None)
+        f1.append(float(2 * tp / (2 * tp + fp + fn)) if 2 * tp + fp + fn else 0.0)
+    return {"component_modacc": acc, "pair_exact": pair, "macro_f1": float(np.mean(f1)), "recall": dict(zip(LABELS, recall))}
+
+
+@torch.inference_mode()
+def evaluate(model, loader, device, encoder):
+    model.eval()
+    ys, ps, ids = [], [], []
+    loss_sum = 0.0; n = 0
+    for x, target, y, idx in loader:
+        x = encoder(x.to(device, non_blocking=True))
+        with torch.cuda.amp.autocast(enabled=device.type == "cuda"):
+            z = model(x)
+            smoothed = (target * (1 - 0.026) + 0.026 / 26).to(device, non_blocking=True)
+            loss = torch.nn.functional.binary_cross_entropy_with_logits(z, smoothed)
+        loss_sum += float(loss.item()) * len(x); n += len(x)
+        z = z.float().cpu().numpy()
+        ps.append(np.stack((z[:, :13].argmax(1), z[:, 13:].argmax(1)), axis=1))
+        ys.append(y.numpy())
+        ids.append(idx.numpy())
+    y, p, ids = np.concatenate(ys), np.concatenate(ps), np.concatenate(ids)
+    result = metrics(y, p); result["loss"] = loss_sum / n
+    return result, y, p, ids
+
+
+def write_predictions(path, dataset_path, y, p, ids):
+    with h5py.File(dataset_path) as h, path.open("w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["source_uid", "view_uid", "noise_seed", "full_component_snr_db", "slot_1", "slot_2", "true_1", "true_2", "pred_1", "pred_2", "correct_1", "correct_2", "pair_exact"])
+        for actual, pred, idx in zip(y, p, ids):
+            i, j = divmod(int(idx), 11)
+            uid = h["source_uid"][i].decode()
+            vid = h["view_uid"][i, j].decode()
+            slots = h["occupied_slots"][i]
+            w.writerow([uid, vid, int(h["noise_seed"][i, j]), float(h["target_full_component_snr_db"][i, j]), int(slots[0]), int(slots[1]), LABELS[actual[0]], LABELS[actual[1]], LABELS[pred[0]], LABELS[pred[1]], int(actual[0] == pred[0]), int(actual[1] == pred[1]), int(np.all(actual == pred))])
+
+
+def state_hash(state):
+    """记录初始权重和缓冲区的逐张量内容指纹，供后续重建核对。"""
+    digest = hashlib.sha256()
+    for name, value in sorted(state.items()):
+        a = value.detach().cpu().contiguous().numpy()
+        digest.update(name.encode("utf-8"))
+        digest.update(str(a.dtype).encode("ascii"))
+        digest.update(np.asarray(a.shape, dtype=np.int64).tobytes())
+        digest.update(a.tobytes())
+    return digest.hexdigest()
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--data", type=Path, required=True)
+    ap.add_argument("--arm", choices=["phase80"], required=True)
+    ap.add_argument("--out", type=Path, required=True)
+    ap.add_argument("--full-cache", type=Path)
+    ap.add_argument("--full-checkpoint", type=Path, required=True)
+    ap.add_argument("--expected-init-hash")
+    ap.add_argument("--shell-root", type=Path, required=True)
+    ap.add_argument("--epochs", type=int, default=200)
+    ap.add_argument("--batch", type=int, default=512)
+    ap.add_argument("--seed", type=int, default=271060)
+    args = ap.parse_args()
+    assert args.seed == 271060 and args.batch == 512 and args.epochs == 200
+    assert args.full_cache is None
+    assert not args.out.exists()
+    sys.path.insert(0, str(args.shell_root))
+    from utils.runtime import configure_runtime, enable_resnet_only_pnn_import
+    configure_runtime(args.seed, deterministic=False, tf32=True)
+    enable_resnet_only_pnn_import()
+    from models.pnn1 import Res1dNet31
+    from utils.utils import WarmUpLR, init_weights
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    assert device.type == "cuda"
+    paths = {s: args.data / "dual" / s / "dataset.h5" for s in ("train", "validation", "development_test")}
+    datasets = {s: Views(p, args.arm, args.full_cache / (s + ".h5") if args.full_cache else None) for s, p in paths.items()}
+    assert [datasets[s].sources for s in paths] == [16900, 3380, 3380]
+    args.out.mkdir(parents=True)
+    g = torch.Generator().manual_seed(args.seed)
+    tr = DataLoader(datasets["train"], batch_size=args.batch, shuffle=True, num_workers=4, pin_memory=True, persistent_workers=True, generator=g)
+    va = DataLoader(datasets["validation"], batch_size=args.batch, shuffle=False, num_workers=4, pin_memory=True, persistent_workers=True)
+    model = init_weights(Res1dNet31(in_channel=80, classes_num=26)).to(device)
+    encoder = PhaseProjection().to(device).eval()
+    assert sum(p.numel() for p in encoder.parameters()) == 0
+    full_state = torch.load(args.full_checkpoint, map_location="cpu")
+    assert set(model.state_dict()) == set(full_state)
+    assert all(model.state_dict()[name].shape == full_state[name].shape for name in full_state)
+    parameter_count = sum(p.numel() for p in model.parameters())
+    full_parameter_count = sum(full_state[name].numel() for name, _ in model.named_parameters())
+    assert parameter_count == full_parameter_count
+    initial_hash = state_hash(model.state_dict())
+    if args.expected_init_hash:
+        assert initial_hash == args.expected_init_hash
+    (args.out / "initialization.json").write_text(json.dumps({
+        "parameter_count": parameter_count, "full80_parameter_count": full_parameter_count,
+        "tensor_shapes_match_full_checkpoint": True, "initial_state_sha256": initial_hash,
+        "historical_full_initial_state_saved": False,
+    }, ensure_ascii=False, indent=2))
+    (args.out / "config.json").write_text(json.dumps({"arm": args.arm, "seed": args.seed, "epochs": args.epochs, "batch": args.batch, "data": str(args.data), "full_cache": None, "coset": COSET.tolist(), "encoding": "unitary FFT1024 + full-frequency Coset adjoint /sqrt40", "input_scale": "physical_iq_div_8", "checkpoint_rule": "Validation component ModAcc >= best; tie overwrites"}, ensure_ascii=False, indent=2))
+    opt = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=0.0001)
+    cosine = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=args.epochs - 5)
+    warmup = WarmUpLR(opt, 5)
+    criterion = torch.nn.BCEWithLogitsLoss().to(device)
+    scaler = torch.cuda.amp.GradScaler(enabled=True)
+    best = -1.0
+    history = []
+    for epoch in range(1, args.epochs + 1):
+        model.train(); total = 0.0; n = 0
+        for x, target, _, _ in tr:
+            x = encoder(x.to(device, non_blocking=True))
+            target = (target * (1 - 0.026) + 0.026 / 26).to(device, non_blocking=True)
+            opt.zero_grad(set_to_none=True)
+            with torch.cuda.amp.autocast(enabled=True):
+                z = model(x)
+                loss = criterion(z, target)
+            scaler.scale(loss).backward(); scaler.step(opt); scaler.update()
+            total += float(loss.item()) * len(x); n += len(x)
+        vm, _, _, _ = evaluate(model, va, device, encoder)
+        row = {"epoch": epoch, "train_loss": total / n, "validation_loss": vm["loss"], "validation_component_modacc": vm["component_modacc"], "validation_pair_exact": vm["pair_exact"], "validation_macro_f1": vm["macro_f1"], "lr": opt.param_groups[0]["lr"]}
+        history.append(row)
+        if vm["component_modacc"] >= best:
+            best = vm["component_modacc"]
+            torch.save(model.state_dict(), args.out / "best_checkpoint_mr.pt")
+            (args.out / "best_validation.json").write_text(json.dumps({"epoch": epoch, "metrics": vm}, ensure_ascii=False, indent=2))
+        with (args.out / "history.csv").open("w", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, row.keys()); w.writeheader(); w.writerows(history)
+        if epoch < 5: warmup.step()
+        else: cosine.step()
+        print("EPOCH", args.arm, epoch, row, flush=True)
+    model.load_state_dict(torch.load(args.out / "best_checkpoint_mr.pt", map_location=device))
+    de = DataLoader(datasets["development_test"], batch_size=args.batch, shuffle=False, num_workers=4, pin_memory=True, persistent_workers=True)
+    dm, y, p, ids = evaluate(model, de, device, encoder)
+    (args.out / "development.json").write_text(json.dumps(dm, ensure_ascii=False, indent=2))
+    write_predictions(args.out / "development_predictions.csv", paths["development_test"], y, p, ids)
+
+
+if __name__ == "__main__":
+    main()

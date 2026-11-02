@@ -1,0 +1,17 @@
+{
+  "gate": "PASS",
+  "batch": 512,
+  "trainable_parameters": 0,
+  "device": "NVIDIA RTX A6000",
+  "encoder_peak_allocated_gib": 0.8463134765625,
+  "encoder_seconds_per_batch": [
+    0.24360396061092615,
+    0.00435774028301239,
+    0.00402542669326067
+  ],
+  "output_shape": [
+    512,
+    80,
+    1024
+  ]
+}
