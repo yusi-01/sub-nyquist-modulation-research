@@ -1,6 +1,6 @@
 # 双信号 SHELL Full/MCS 正式执行合同
 
-日期：2026-11-01。状态：**方案冻结；历史实物核心门禁 PASS；新配对数据 P0 未执行；训练未启动。**本文件是本轮唯一执行合同。训练 seed 固定 271060，仅一轮单种子 Development 实验。禁止 Final Test、额外模型、额外 seed 和历史结果驱动调参。
+日期：2026-11-01。状态更新于 2026-11-02：**历史核心审计、v2 配对数据 P0、MCS 与 Full 单 seed Development 基线均已完成。**本文件是本轮唯一执行合同。训练 seed 固定 271060，仅一轮单种子 Development 实验。禁止 Final Test、额外模型、额外 seed 和历史结果驱动调参。最终结果见[单种子 Development 报告](../experiments/20261101_shell_paired_baseline/results/双信号SHELL_Full_MCS严格配对单种子Development报告_20261102.md)。
 
 ## 本任务持续要求（2026-11-01 用户补充）
 
@@ -53,5 +53,5 @@ Development 仅在各自 Validation 选点完成后评价一次，报告 11 档 
 
 ## 六、当前执行决策
 
-历史核心审计：**PASS**（上述范围）。历史 Full 重建可能性：**PASS（抽样）**，全量严格配对仍 **UNKNOWN**。新 v2 配对数据 P0：**UNKNOWN，未生成/未执行**。资源与前向门禁：**UNKNOWN，未执行**。可信双信号基线训练启动条件：**未满足**。当前无新配对实验结果可判断是否已具备研究双信号低 SNR 额外混淆的条件。
+历史核心审计：**PASS**（上述范围）。历史 Full 重建可能性：**PASS（抽样）**，全量严格配对仍 **UNKNOWN**。新 v2 配对数据 P0：**PASS**；Full/MCS 逐点配对缓存与资源/前向门禁：**PASS**。两臂均完成 seed 271060 的 200 epoch 训练，仅按 Validation 选点，独立 Development 评价与按 source_uid 成组统计已完成。开发结果支持后续研究低 SNR 额外混淆；本轮已结束，不自动开展下一阶段，也不读取 Final Test。
 
