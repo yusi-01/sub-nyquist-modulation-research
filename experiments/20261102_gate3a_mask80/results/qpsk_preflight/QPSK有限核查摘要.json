@@ -1,0 +1,11 @@
+{
+  "sources": 3380,
+  "views": 37180,
+  "qpsk_component_views": 5720,
+  "mcs_qpsk_to_psk16": 1896,
+  "mcs_qpsk_to_psk8": 950,
+  "mcs_qpsk_to_oqpsk": 139,
+  "full_correct_mcs_qpsk_to_psk8_or_16": 2770,
+  "slot_support_min": 165,
+  "slot_support_max": 363
+}
