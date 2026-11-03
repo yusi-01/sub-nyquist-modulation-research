@@ -1,0 +1,33 @@
+{
+  "mathematical_identity": "PASS",
+  "formal_train_clean_full_to_mcs_max_abs_complex128": 1.7550743946437938e-14,
+  "oracle": "PASS",
+  "validation_sources": 3380,
+  "validation_views": 37180,
+  "validation_mean_clean_distortion": 0.00021206973117428356,
+  "validation_max_clean_distortion": 0.0009912080082253847,
+  "validation_mean_oracle_noise_ratio": 0.2500076332444461,
+  "validation_mean_oracle_gain_db": 6.003359488958393,
+  "blind": "PASS",
+  "validation_minus10_support_exact": 0.9843195266272189,
+  "validation_minus10_wrong_views": 53,
+  "development_minus10_support_exact": 0.9849112426035503,
+  "development_minus10_wrong_views": 51,
+  "validation_mean_blind_gain_db": 6.0021933395699145,
+  "development_mean_blind_gain_db": 6.001929663421364,
+  "classification_gain": "UNKNOWN",
+  "decision": "PASS_PHYSICAL_ONLY",
+  "method": "固定两轮 SOMP + 双槽正交投影",
+  "development_used_for_tuning": false,
+  "final_test_read": false,
+  "cnn_training_started": false,
+  "script_sha256": {
+    "gate3c_physical.py": "c0d5b17749cee8cf1b27e6d3c9dc6f82128b409384a538f4c591de7ed16e7951",
+    "analyze_gate3c.py": "f647245697e32cfa45bb5048a7474c56cbca36628a3c823c324b80cad7f39dd6"
+  },
+  "formal_h5_paths": [
+    "runs/shell_dual_paired_16900_seed271060_20261101/data_v2_paired/dual/train/dataset.h5",
+    "runs/shell_dual_paired_16900_seed271060_20261101/data_v2_paired/dual/validation/dataset.h5",
+    "runs/shell_dual_paired_16900_seed271060_20261101/data_v2_paired/dual/development_test/dataset.h5"
+  ]
+}
