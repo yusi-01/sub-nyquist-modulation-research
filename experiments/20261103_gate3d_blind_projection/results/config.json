@@ -1,0 +1,15 @@
+{
+  "cache_sha256": {
+    "train": "19d13883f56cab99f618899771596a32da6dd1ee5eace31a8f6f38ff60759f5d",
+    "validation": "90dc6b137567c8e214a8641eba2b033b1b88e1f7d9a28a8474e6959945a93cbd",
+    "development_test": "c9b4d961a57d5c6f1fcca5bb3ac9ee1bfddf597ab9a430e4347b7acda61d808a"
+  },
+  "arm": "blind",
+  "seed": 271060,
+  "epochs": 200,
+  "batch": 512,
+  "data": "runs/shell_dual_paired_16900_seed271060_20261101/data_v2_paired",
+  "cache_root": "runs/gate3d_blind_projection_20261103",
+  "gate3c_code": "runs/gate3c_blind_support_20261103/code",
+  "checkpoint_rule": "Validation component ModAcc >= best; tie overwrites"
+}
