@@ -1,0 +1,67 @@
+{
+  "status": "PASS",
+  "rows": 37180,
+  "sources": 3380,
+  "views_per_source": 11,
+  "best_epoch": 106,
+  "best_validation": {
+    "epoch": 106,
+    "metrics": {
+      "component_modacc": 0.6797875201721355,
+      "pair_exact": 0.47280796126949975,
+      "macro_f1": 0.668597454161644,
+      "recall": {
+        "APSK16": 0.725,
+        "APSK32": 0.6842657342657342,
+        "APSK64": 0.620979020979021,
+        "ASK8": 0.9888111888111888,
+        "BPSK": 0.9917832167832168,
+        "OQPSK": 0.9786713286713287,
+        "PSK16": 0.531993006993007,
+        "PSK8": 0.3618881118881119,
+        "QAM128": 0.9708041958041959,
+        "QAM16": 0.5445804195804196,
+        "QAM256": 0.1166083916083916,
+        "QAM64": 0.4437062937062937,
+        "QPSK": 0.8781468531468531
+      },
+      "loss": 0.11051020843165738
+    }
+  },
+  "development": {
+    "component_modacc": 0.678617536309844,
+    "pair_exact": 0.4735879505110274,
+    "macro_f1": 0.6665391469785362,
+    "recall": {
+      "APSK16": 0.7176573426573427,
+      "APSK32": 0.6879370629370629,
+      "APSK64": 0.6314685314685314,
+      "ASK8": 0.9893356643356643,
+      "BPSK": 0.9938811188811189,
+      "OQPSK": 0.9798951048951049,
+      "PSK16": 0.5601398601398602,
+      "PSK8": 0.333041958041958,
+      "QAM128": 0.9676573426573427,
+      "QAM16": 0.527972027972028,
+      "QAM256": 0.11328671328671329,
+      "QAM64": 0.44737762237762235,
+      "QPSK": 0.8723776223776224
+    },
+    "loss": 0.11061213782969953
+  },
+  "sha256": {
+    "20261102_gate2_shell_confusion\\results\\raw\\mcs_development_predictions.csv": "ac7d5e647a64b6b5f5b5d01d5262136ceb490644d1a48041aa2400479e749814",
+    "20261103_gate3d_blind_projection\\results\\development_predictions.csv": "4c6d1c7dffd940bea1bd47936c19caa67b77216fae9264d1fa8e1c9f7aa4f0cc",
+    "20261102_gate2_shell_confusion\\results\\raw\\full_development_predictions.csv": "d062ef9abd206841d623d0a8e56d09a92b30093775695381ec16284c9baa5691",
+    "20261103_gate3c_blind_support\\results\\formal_development_blind\\逐源视图摘要.csv": "aea306a699fff8111542e7fad7d25df2a0530e6d44f99800e713f177f494c198",
+    "20261104_gate3e_dual_view\\results\\raw\\config.json": "6c155b627179fd05e6e0ad89153b0f846599477b5b65c9a166b1c9d8fdcb84e8",
+    "20261104_gate3e_dual_view\\results\\raw\\history.csv": "5eca0e4388b252cf1339c2cb4158444260943dcc6abcd53f24d5b0ee61c99ccf",
+    "20261104_gate3e_dual_view\\results\\raw\\best_validation.json": "a116286a339d219ab0a06f6df06eb560bd0e8d4b6046c9493285c208568d6fe9",
+    "20261104_gate3e_dual_view\\results\\raw\\best_checkpoint_mr.pt": "0d61360228189c2613abae8b4285b2b3a6a4077f978416a279bcbea730a5491b",
+    "20261104_gate3e_dual_view\\results\\raw\\development.json": "f250911d257d673319723d255291ad360e6da7213025077b6ec4d329d99d86e7",
+    "20261104_gate3e_dual_view\\results\\raw\\development_predictions.csv": "08ff7502a78cb42227bd137ce5211856bcc895a4b838e056c67d39b46373ed1f",
+    "20261104_gate3e_dual_view\\results\\raw\\development_branch_logits.npz": "f2a8db518e90db6f2cf3f80601b0be26ee051a127d5fd7a0f813f73d163389d3"
+  },
+  "bootstrap_seed": 271060,
+  "bootstrap_replicates": 2000
+}
